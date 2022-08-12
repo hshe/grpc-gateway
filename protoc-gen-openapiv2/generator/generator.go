@@ -9,18 +9,18 @@ import (
 
 // Generator is openapi v2 generator
 type Generator struct {
-	reg *descriptor.Registry
+	Reg *descriptor.Registry
 }
 
 // NewGenerator return Generator
 func NewGenerator(options ...Option) *Generator {
 	gen := &Generator{
-		reg: descriptor.NewRegistry(),
+		Reg: descriptor.NewRegistry(),
 	}
-	gen.reg.SetUseJSONNamesForFields(true)
-	gen.reg.SetRecursiveDepth(1024)
-	gen.reg.SetMergeFileName("apidocs")
-	gen.reg.SetDisableDefaultErrors(true)
+	gen.Reg.SetUseJSONNamesForFields(true)
+	gen.Reg.SetRecursiveDepth(1024)
+	gen.Reg.SetMergeFileName("apidocs")
+	gen.Reg.SetDisableDefaultErrors(true)
 	for _, o := range options {
 		o(gen)
 	}
@@ -29,11 +29,12 @@ func NewGenerator(options ...Option) *Generator {
 
 // Gen generates openapi v2 json content
 func (g *Generator) Gen(req *pluginpb.CodeGeneratorRequest, onlyRPC bool) (*pluginpb.CodeGeneratorResponse, error) {
-	reg := g.reg
+	reg := g.Reg
 	if reg == nil {
-		reg = NewGenerator().reg
+		reg = NewGenerator().Reg
 	}
-	reg.SetGenerateRPCMethods(onlyRPC)
+	//reg.SetGenerateRPCMethods(onlyRPC)
+	reg.SetGenerateUnboundMethods(onlyRPC)
 	if err := reg.SetRepeatedPathParamSeparator("csv"); err != nil {
 		return nil, err
 	}
